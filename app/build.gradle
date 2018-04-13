@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
@@ -42,6 +45,10 @@ android {
         disable "ResourceType"
         abortOnError false
     }
+
+    kapt {
+        generateStubs = true
+    }
 }
 
 buildscript {
@@ -58,12 +65,12 @@ dependencies {
         exclude module: 'support-annotations'
     }
     //tools
-    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+    kapt rootProject.ext.dependencies["dagger2-compiler"]
     implementation rootProject.ext.dependencies["progressmanager"]
     implementation rootProject.ext.dependencies["retrofit-url-manager"]
     implementation rootProject.ext.dependencies["lifecyclemodel"]
     //view
-    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+    kapt(rootProject.ext.dependencies["butterknife-compiler"]) {
         exclude module: 'support-annotations'
     }
     implementation rootProject.ext.dependencies["paginate"]

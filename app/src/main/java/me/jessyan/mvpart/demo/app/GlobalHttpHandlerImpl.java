@@ -16,20 +16,11 @@
 package me.jessyan.mvpart.demo.app;
 
 import android.content.Context;
-import android.text.TextUtils;
-
-import com.google.gson.reflect.TypeToken;
-
-import java.util.List;
 
 import me.jessyan.art.http.GlobalHttpHandler;
-import me.jessyan.art.http.log.RequestInterceptor;
-import me.jessyan.art.utils.ArtUtils;
-import me.jessyan.mvpart.demo.mvp.model.entity.User;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import timber.log.Timber;
 
 /**
  * ================================================
@@ -52,16 +43,16 @@ public class GlobalHttpHandlerImpl implements GlobalHttpHandler {
                     /* 这里可以先客户端一步拿到每一次http请求的结果,可以解析成json,做一些操作,如检测到token过期后
                        重新请求token,并重新执行请求 */
 
-        if (!TextUtils.isEmpty(httpResult) && RequestInterceptor.isJson(response.body().contentType())) {
-            try {
-                List<User> list = ArtUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<User>>() {}.getType());
-                User user = list.get(0);
-                Timber.w("Result ------> " + user.getLogin() + "    ||   Avatar_url------> " + user.getAvatarUrl());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return response;
-            }
-        }
+//        if (!TextUtils.isEmpty(httpResult) && RequestInterceptor.isJson(response.body().contentType())) {
+//            try {
+//                List<User> list = ArtUtils.obtainAppComponentFromContext(context).gson().fromJson(httpResult, new TypeToken<List<User>>() {}.getType());
+//                User user = list.get(0);
+//                Timber.w("Result ------> " + user.getLogin() + "    ||   Avatar_url------> " + user.getAvatarUrl());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return response;
+//            }
+//        }
 
                  /* 这里如果发现token过期,可以先请求最新的token,然后在拿新的token放入request里去重新请求
                     注意在这个回调之前已经调用过proceed,所以这里必须自己去建立网络请求,如使用okhttp使用新的request去请求

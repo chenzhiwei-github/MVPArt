@@ -85,4 +85,13 @@ public class LogUtils {
         debugLongInfo(DEFAULT_TAG, str);
     }
 
+    public static void e(String tag, String msg) {
+        if (!isLog || TextUtils.isEmpty(msg)) return;
+        Log.e(tag, msg);
+    }
+
+    public static void e(String msg) {
+        e(DEFAULT_TAG, msg);
+    }
+
 }

@@ -23,7 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.widget.Toast;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -38,6 +38,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import me.jessyan.art.base.delegate.AppLifecycles;
+import me.jessyan.art.utils.LoadingDialogUtils;
 import timber.log.Timber;
 
 /**
@@ -62,6 +63,8 @@ public final class AppManager {
     public static final int SHOW_SNACKBAR = 5001;
     public static final int KILL_ALL = 5002;
     public static final int APP_EXIT = 5003;
+    public static final int SHOW_LOADING = 5004;
+    public static final int HIDE_LOADING = 5005;
     @Inject
     Application mApplication;
     //管理所有存活的 Activity, 容器中的顺序仅仅是 Activity 的创建顺序, 并不能保证和 Activity 任务栈顺序一致
@@ -102,6 +105,13 @@ public final class AppManager {
                 break;
             case APP_EXIT:
                 appExit();
+                break;
+            case SHOW_LOADING:
+                assert getCurrentActivity() != null;
+                LoadingDialogUtils.INSTANCE.show(getCurrentActivity());
+                break;
+            case HIDE_LOADING:
+                LoadingDialogUtils.INSTANCE.dismiss();
                 break;
             default:
                 Timber.tag(TAG).w("The message.what not match");
@@ -155,8 +165,9 @@ public final class AppManager {
             Timber.tag(TAG).w("mCurrentActivity == null when showSnackbar(String,boolean)");
             return;
         }
-        View view = getCurrentActivity().getWindow().getDecorView().findViewById(android.R.id.content);
-        Snackbar.make(view, message, isLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT).show();
+//        View view = getCurrentActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+//        Snackbar.make(view, message, isLong ? Snackbar.LENGTH_LONG : Snackbar.LENGTH_SHORT).show();
+        Toast.makeText(getCurrentActivity(), message, isLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
     }
 
 

@@ -36,6 +36,7 @@ import me.jessyan.art.utils.Preconditions;
  */
 public class BaseApplication extends Application implements App {
     private AppLifecycles mAppDelegate;
+    private static BaseApplication instance;
 
     /**
      * 这里会在 {@link BaseApplication#onCreate} 之前被调用,可以做一些较早的初始化
@@ -54,6 +55,7 @@ public class BaseApplication extends Application implements App {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         if (mAppDelegate != null)
             this.mAppDelegate.onCreate(this);
     }
@@ -70,10 +72,10 @@ public class BaseApplication extends Application implements App {
 
 
     /**
-     *将 {@link AppComponent} 返回出去, 供其它地方使用, {@link AppComponent} 接口中声明的方法所返回的实例, 在 {@link #getAppComponent()} 拿到对象后都可以直接使用
+     * 将 {@link AppComponent} 返回出去, 供其它地方使用, {@link AppComponent} 接口中声明的方法所返回的实例, 在 {@link #getAppComponent()} 拿到对象后都可以直接使用
      *
-     * @see ArtUtils#obtainAppComponentFromContext(Context) 可直接获取 {@link AppComponent}
      * @return AppComponent
+     * @see ArtUtils#obtainAppComponentFromContext(Context) 可直接获取 {@link AppComponent}
      */
     @NonNull
     @Override
@@ -81,6 +83,15 @@ public class BaseApplication extends Application implements App {
         Preconditions.checkNotNull(mAppDelegate, "%s cannot be null", AppDelegate.class.getName());
         Preconditions.checkState(mAppDelegate instanceof App, "%s must be implements %s", AppDelegate.class.getName(), App.class.getName());
         return ((App) mAppDelegate).getAppComponent();
+    }
+
+    /**
+     * BaseApplication 单例
+     *
+     * @return
+     */
+    public static BaseApplication getInstance() {
+        return instance;
     }
 
 }
