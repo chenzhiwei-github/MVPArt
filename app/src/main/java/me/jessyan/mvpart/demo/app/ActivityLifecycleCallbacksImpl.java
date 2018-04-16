@@ -20,6 +20,7 @@ import android.app.Application;
 import android.os.Bundle;
 
 import me.jessyan.art.utils.LoadingDialogUtils;
+import me.jessyan.mvpart.demo.app.utils.CleanLeakUtils;
 import timber.log.Timber;
 
 /**
@@ -95,5 +96,7 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
 //        activity.getIntent().removeExtra("isInitToolbar");
         //释放LoadingDialog
         LoadingDialogUtils.INSTANCE.clear();
+        //通过反射修复 InputMethodManager内存泄漏
+        CleanLeakUtils.fixInputMethodManagerLeak(activity);
     }
 }
